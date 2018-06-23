@@ -4,7 +4,7 @@ Para auxiliar as pessoas que querem realizar seus leasings, vamos colocar uma p�
 
 Para ser justo com todos, criamos os seguintes pre-requisitos para identificar aqueles que fazem disto uma profissão.
 
-##Pré Requisitos##
+## Pré Requisitos
 
 1) **Ter um site para seu node** – Não dá para ganhar dinheiro sem ter uma “porta de entrada” para o seu negócio.
 
@@ -18,7 +18,7 @@ Para ser justo com todos, criamos os seguintes pre-requisitos para identificar a
 
 5) Todos podem se inscrever… Porém, para ser listado, deve estar entre os TOP 20 Profissionais em Share, nos últimos 1500 blocos. Este script rodará diariamente e atualizará a página. Iremos filtrar somente os inscritos (mesmo que algumas baleias montem seu node próprio, com zilhões de Lunes) e os mostraremos para a comunidade.
 
-##Como isto será feito?##
+## Como isto será feito?
 
 O Objetivo é validar o domínio do node e sua Wallet. 
 
