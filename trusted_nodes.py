@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import LunesLIB as pw
+import PyWaves as pw
 import requests
 import math
 import json
@@ -16,8 +16,22 @@ generators = []
 unique_generators = []
 last = requests.get(node + '/blocks/height').json()['height']
 data = {}  
-path_out=""
 data['node'] = []  
+def get_txt(dom):
+    try:
+      txt_data = json.loads(json.dumps(requests.get ('https://dns-api.org/TXT/' + dom ).json()))
+      indice = 0
+      for line in txt_data:
+         VALUE=txt_data[indice]['value']
+         if VALUE.find('NODE_ADDRESS') != -1:
+            txt_address = VALUE.split('=')[1]
+            return txt_address
+         indice += 1
+ 
+    finally:
+      txt_address = ""
+      return txt_address
+
 def get_address(url):
     try:
         response = requests.get(url)
@@ -43,16 +57,16 @@ for generator in set([x[0] for x in generators]):
     unique_generators.append((generator, generator_balance, count, fees))
     total_balance += generator_balance
 for i, generator in enumerate(sorted(unique_generators, key=lambda x: -x[1])):
-   char_list = ['\[', ',', '\]', '\"', "\'"]
-   alias = json.dumps( requests.get (node + '/addresses/alias/by-address/' + generator[0]).json())
-   limpo = re.sub("|".join(char_list), "", str(alias.split(':')) )
-   if limpo.strip():
-      domain = limpo.split()[2]
-      URL =  'https://' + limpo.split()[2] + '/address.txt'
-#      print "Fetching URL '{}'".format(URL), get_address(URL)
-      node_address = get_address(URL)
-      if node_address == str(generator[0]):
-         data['node'].append({'domain': domain, 'address': str(generator[0]), 'balance': str(generator[1]), 'share': str(generator[1] / total_balance * 100), 'blocks': str(generator[2]), 'fees': str(generator[3])})
+    char_list = ['\[', ',', '\]', '\"', "\'"]
+    alias = json.dumps( requests.get (node + '/addresses/alias/by-address/' + generator[0]).json())
+    limpo = re.sub("|".join(char_list), "", str(alias.split(':')) )
+    if limpo.strip():
+       domain = limpo.split()[2]
+       URL =  'https://' + limpo.split()[2] + '/address.txt'
+       node_address = get_address(URL)
+       dns_address = get_txt(domain)
+       if str(generator[0]) in (node_address, dns_address):
+          data['node'].append({'domain': domain, 'address': str(generator[0]), 'balance': str(generator[1]), 'share': str(generator[1] / total_balance * 100), 'blocks': str(generator[2]), 'fees': str(generator[3])})
 
-with open(path_out + '/trust.json', 'w') as outfile:  
+with open('/home/checchia/Sites/lunes.in/trust.json', 'w') as outfile:  
     json.dump(data, outfile)
