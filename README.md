@@ -24,9 +24,9 @@ O Objetivo é validar o domínio do node e sua Wallet.
 
 Ao ler o Alias no Blockchain, iremos validar o Domínio:
 * Tem arquivo address.txt? Se não tem, Tem TXT de DNS? Se, não tiver um dos dois, não será incluído.
-...Assumindo que uma das duas validações existam, verificaremos o Alias, com o endereço da wallet:
+..* Assumindo que uma das duas validações existam, verificaremos o Alias, com o endereço da wallet:
 * O endereço validado é diferente do endereço do Alias? Se sim, descartado.
-...Validações concluídas, o node será incluído na lista.
+..* Validações concluídas, o node será incluído na lista.
 
 Mais alguma sugestão ou comentário? Estamos numa comunidade onde todos podem opinar….
 
