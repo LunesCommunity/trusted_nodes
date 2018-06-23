@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import PyWaves as pw
+import LunesLIB as pw
 import requests
 import math
 import json
@@ -16,6 +16,7 @@ generators = []
 unique_generators = []
 last = requests.get(node + '/blocks/height').json()['height']
 data = {}  
+path_out=""
 data['node'] = []  
 def get_address(url):
     try:
@@ -53,5 +54,5 @@ for i, generator in enumerate(sorted(unique_generators, key=lambda x: -x[1])):
       if node_address == str(generator[0]):
          data['node'].append({'domain': domain, 'address': str(generator[0]), 'balance': str(generator[1]), 'share': str(generator[1] / total_balance * 100), 'blocks': str(generator[2]), 'fees': str(generator[3])})
 
-with open('/home/checchia/Sites/lunes.in/trust.json', 'w') as outfile:  
+with open(path_out + '/trust.json', 'w') as outfile:  
     json.dump(data, outfile)
