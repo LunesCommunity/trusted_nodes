@@ -15,6 +15,9 @@ total_fees = 0
 generators = []
 unique_generators = []
 last = requests.get(node + '/blocks/height').json()['height']
+
+blacklist = ['legion.cash']
+
 data = {}  
 data['node'] = []  
 def get_txt(dom):
@@ -34,14 +37,12 @@ def get_txt(dom):
 
 def get_address(url):
     try:
-        response = requests.get(url)
+      response = requests.get(url)
+      if not response.status_code // 100 == 2:
+          return "Error: Unexpected response {}".format(response)
 
-        # Consider any status other than 2xx an error
-        if not response.status_code // 100 == 2:
-            return "Error: Unexpected response {}".format(response)
-
-        TXT_Data = response.text
-        return TXT_Data
+      TXT_Data = response.text
+      return TXT_Data
     except requests.exceptions.RequestException as e:
         # A serious problem happened, like an SSLError or InvalidURL
         return "Error: {}".format(e)
@@ -62,11 +63,12 @@ for i, generator in enumerate(sorted(unique_generators, key=lambda x: -x[1])):
     limpo = re.sub("|".join(char_list), "", str(alias.split(':')) )
     if limpo.strip():
        domain = limpo.split()[2]
-       URL =  'https://' + limpo.split()[2] + '/address.txt'
-       node_address = get_address(URL)
-       dns_address = get_txt(domain)
-       if str(generator[0]) in (node_address, dns_address):
-          data['node'].append({'domain': domain, 'address': str(generator[0]), 'balance': str(generator[1]), 'share': str(generator[1] / total_balance * 100), 'blocks': str(generator[2]), 'fees': str(generator[3])})
+       if domain not in blacklist:
+          URL =  'https://' + limpo.split()[2] + '/address.txt'
+          node_address = get_address(URL)
+          dns_address = get_txt(domain)
+          if str(generator[0]) in (node_address, dns_address):
+             data['node'].append({'domain': domain, 'address': str(generator[0]), 'balance': str(generator[1]), 'share': str(generator[1] / total_balance * 100), 'blocks': str(generator[2]), 'fees': str(generator[3])})
 
 with open('/home/checchia/Sites/lunes.in/trust.json', 'w') as outfile:  
     json.dump(data, outfile)
