@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 import requests
 import math
@@ -7,7 +7,7 @@ import re
 import io
 
 node = 'http://api.lunes.in'
-nblocks = 10080
+nblocks = 10080 # roughly one week
 total_balance = 0
 total_fees = 0
 generators = []
@@ -15,9 +15,7 @@ unique_generators = []
 last = requests.get(node + '/blocks/height').json()['height']
 
 blacklist = ['legion.cash']
-
-data = {}
-data['node'] = []
+data = {'node': []}
 
 
 def get_txt(domain):
