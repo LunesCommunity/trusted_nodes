@@ -43,8 +43,7 @@ def get_address(url):
         if not response.status_code // 100 == 2:
             return "Error: Unexpected response {}".format(response)
 
-        TXT_Data = response.text
-        return TXT_Data
+        return response.text
     except requests.exceptions.RequestException as e:
         # A serious problem happened, like an SSLError or InvalidURL
         return "Error: {}".format(e)
