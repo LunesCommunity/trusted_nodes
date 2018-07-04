@@ -3,8 +3,6 @@
 import requests
 import math
 import json
-import re
-import io
 
 node = 'http://api.lunes.in'
 nblocks = 10080 # roughly one week
@@ -57,13 +55,10 @@ for generator in set([x[0] for x in generators]):
     total_balance += generator_balance
 
 for i, generator in enumerate(sorted(unique_generators, key=lambda x: -x[1])):
-    char_list = ['\[', ',', '\]', '\"', "\'"]
     aliases = requests.get(
         node + '/addresses/alias/by-address/' + generator[0]).json()
     for alias in aliases:
-        limpo = re.sub("|".join(char_list), "", str(alias.split(':')))
-        if limpo.strip():
-            domain = limpo.split()[2]
+        domain = alias.split(':')[2]
             if domain not in blacklist:
                 address_txt_url = 'https://' + domain + '/address.txt'
                 node_address = get_address(address_txt_url)
