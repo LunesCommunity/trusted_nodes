@@ -66,8 +66,10 @@ for generator in set([x[0] for x in generators]):
 
 for i, generator in enumerate(sorted(unique_generators, key=lambda x: -x[1])):
     char_list = ['\[', ',', '\]', '\"', "\'"]
-    alias = json.dumps( requests.get (node + '/addresses/alias/by-address/' + generator[0]).json())
-    limpo = re.sub("|".join(char_list), "", str(alias.split(':')) )
+    aliases = requests.get(
+        node + '/addresses/alias/by-address/' + generator[0]).json()
+    for alias in aliases:
+        limpo = re.sub("|".join(char_list), "", str(alias.split(':')))
         if limpo.strip():
             domain = limpo.split()[2]
             if domain not in blacklist:
