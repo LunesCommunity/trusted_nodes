@@ -72,13 +72,13 @@ for i, generator in enumerate(sorted(unique_generators, key=lambda x: -x[1])):
         if limpo.strip():
             domain = limpo.split()[2]
             if domain not in blacklist:
-            address_txt_url = 'https://' + domain + '/address.txt'
-            node_address = get_address(address_txt_url)
-            dns_address = get_txt(domain)
-            if str(generator[0]) in (node_address, dns_address):
-                data['node'].append({'domain': domain, 'address': str(generator[0]), 'balance': str(generator[1]), 'share': str(
-                    generator[1] / total_balance * 100), 'blocks': str(generator[2]), 'fees': str(generator[3])})
+                address_txt_url = 'https://' + domain + '/address.txt'
+                node_address = get_address(address_txt_url)
+                dns_address = get_txt(domain)
+                if str(generator[0]) in (node_address, dns_address):
+                    data['node'].append({'domain': domain, 'address': str(generator[0]), 'balance': str(generator[1]), 'share': str(
+                        generator[1] / total_balance * 100), 'blocks': str(generator[2]), 'fees': str(generator[3])})
 
 
-with open('/home/checchia/Sites/lunes.in/trust.json', 'w') as outfile:  
+with open('trusted.json', 'w') as outfile:
     json.dump(data, outfile)
