@@ -19,12 +19,15 @@ blacklist = ['legion.cash']
 
 data = {}  
 data['node'] = []  
+
+
 def get_txt(dom):
     try:
-      txt_data = json.loads(json.dumps(requests.get ('https://dns-api.org/TXT/' + dom ).json()))
+        txt_data = json.loads(json.dumps(requests.get(
+            'https://dns-api.org/TXT/' + dom).json()))
       indice = 0
       for line in txt_data:
-         VALUE=txt_data[indice]['value']
+            VALUE = txt_data[indice]['value']
          if VALUE.find('NODE_ADDRESS') != -1:
             txt_address = VALUE.split('=')[1]
             return txt_address
@@ -33,6 +36,7 @@ def get_txt(dom):
     finally:
       txt_address = ""
       return txt_address
+
 
 def get_address(url):
     try:
@@ -46,15 +50,18 @@ def get_address(url):
         # A serious problem happened, like an SSLError or InvalidURL
         return "Error: {}".format(e)
 
+
 for n in range(0, int(math.ceil(nblocks / 100.0))):
     for block in requests.get('%s/blocks/seq/%d/%d' % (node, last - nblocks + n * 100, min(last, last - nblocks + (n + 1) * 100 - 1))).json():
-        generators.append((str(block['generator']), float(block['fee']) / 100000000))
+        generators.append(
+            (str(block['generator']), float(block['fee']) / 100000000))
 
 for generator in set([x[0] for x in generators]):
     fees = sum(g[1] for g in filter(lambda x: x[0] == generator, generators))
     count = sum(1 for g in filter(lambda x: x[0] == generator, generators))
     total_fees += fees
-    generator_balance = float(requests.get(node + '/consensus/generatingbalance/' + generator).json()['balance']) / 100000000
+    generator_balance = float(requests.get(
+        node + '/consensus/generatingbalance/' + generator).json()['balance']) / 100000000
     unique_generators.append((generator, generator_balance, count, fees))
     total_balance += generator_balance
 
@@ -69,7 +76,9 @@ for i, generator in enumerate(sorted(unique_generators, key=lambda x: -x[1])):
           node_address = get_address(URL)
           dns_address = get_txt(domain)
           if str(generator[0]) in (node_address, dns_address):
-             data['node'].append({'domain': domain, 'address': str(generator[0]), 'balance': str(generator[1]), 'share': str(generator[1] / total_balance * 100), 'blocks': str(generator[2]), 'fees': str(generator[3])})
+                data['node'].append({'domain': domain, 'address': str(generator[0]), 'balance': str(generator[1]), 'share': str(
+                    generator[1] / total_balance * 100), 'blocks': str(generator[2]), 'fees': str(generator[3])})
+
 
 with open('/home/checchia/Sites/lunes.in/trust.json', 'w') as outfile:  
     json.dump(data, outfile)
