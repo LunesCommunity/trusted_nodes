@@ -20,21 +20,16 @@ data = {}
 data['node'] = []
 
 
-def get_txt(dom):
+def get_txt(domain):
     try:
         txt_data = json.loads(json.dumps(requests.get(
-            'https://dns-api.org/TXT/' + dom).json()))
-        indice = 0
-        for line in txt_data:
-            VALUE = txt_data[indice]['value']
-            if VALUE.find('NODE_ADDRESS') != -1:
-                txt_address = VALUE.split('=')[1]
-                return txt_address
-            indice += 1
-
-    finally:
-        txt_address = ""
+            'https://dns-api.org/TXT/' + domain).json()))
+        txt_value = txt_data[0]['value']
+        if txt_value.find('NODE_ADDRESS') != -1:
+            txt_address = txt_value.split('=')[1]
         return txt_address
+    except:
+        return ''
 
 
 def get_address(url):
