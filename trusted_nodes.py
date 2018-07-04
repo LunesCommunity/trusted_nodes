@@ -64,7 +64,7 @@ for i, generator in enumerate(sorted(unique_generators, key=lambda x: -x[1])):
     if limpo.strip():
        domain = limpo.split()[2]
        if domain not in blacklist:
-          URL =  'https://' + limpo.split()[2] + '/address.txt'
+          URL =  'https://' + domain + '/address.txt'
           node_address = get_address(URL)
           dns_address = get_txt(domain)
           if str(generator[0]) in (node_address, dns_address):
